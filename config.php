@@ -13,13 +13,13 @@ mb_regex_encoding('UTF8');
 
 define("PDO_HOST", "localhost");
 define("PDO_USER", "root");
-define("PDO_DB", "ordox");
+define("PDO_DB", "calendario_ufu");
 define("PDO_PASS", "");
 
 define("PDO_DRIVER", "mysql");
 define("PDO_PORT", "3306");
 
-define("PATH", "PHP-PESSOAL/PROJETOS/OrdoX/projeto/");
+define("PATH", "PHP-PESSOAL/PESSOAL/www/");
 define("PATH_UPLOAD", "");
 define("BASE_URL", "http://localhost/OrdoX/projeto/");
 
