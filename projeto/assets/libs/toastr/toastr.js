@@ -170,8 +170,7 @@
                     closeEasing: false,
                     closeOnHover: true,
 
-                    extendedTimeOut: 1000,
-                    iconClasses: {
+                    extendedTimeOut: 100iconClasses: {
                         error: 'toast-error',
                         info: 'toast-info',
                         success: 'toast-success',

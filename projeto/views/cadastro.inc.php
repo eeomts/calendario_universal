@@ -245,7 +245,7 @@
         <h1>Criar Conta</h1>
         <p>Preencha os dados para se cadastrar</p>
     </div>
-    <form id="frm-cadastro" method="POST" action="ajax/save-cadastro.php">
+    <form id="frm-cadastro" action="<?= BASE_URL ?>ajax/save-cadastro" method="POST" name="frm-cadastro">
         <div class="name-group">
             <div class="form-group">
                 <label for="firstName">Nome</label>
@@ -275,14 +275,14 @@
 
 
         <div class="checkbox-group">
-            <input type="checkbox" id="terms">
+            <input type="checkbox" id="terms" name="terms">
             <label for="terms">Eu aceito os <a href="#">termos de uso</a> e a <a href="#">política de
                     privacidade</a></label>
         </div>
 
-        <button class="btn" type="submit" onclick="return validarSenha()">Cadastrar</button>
-        <p id="erroSenha" style="color:red; margin-top:10px;"></p>
+        <button class="btn" type="submit">Cadastrar</button>
     </form>
+
     <div class="login-link">
         Já tem uma conta? <a href="login.inc.php">Faça login</a>
     </div>

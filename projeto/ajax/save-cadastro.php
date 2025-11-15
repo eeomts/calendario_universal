@@ -1,22 +1,18 @@
 <?php
+
+
 include('../config.php');
-extract($_POST);
+
+if (ob_get_length()) {
+    ob_clean();
+}
+header("Content-Type: application/json; charset=utf-8");
+
 
 $Main = new Main();
 
-$save_cadastro = $Main->insertCadastro($_POST);
-
-$nome = $_POST['nome'] ?? [];
-
-$email = $_POST['email'] ?? [];
-
-$url = "views/login";
-
-// Retorno JSON
-$retorno = array(
-    'response' => "Solicitaçao realizada com sucesso!",
-    'type' => 'success',
-    "redir" => "{$url}"
-);
+$retorno = $Main->insertCadastro($_POST);
 
 echo json_encode($retorno);
+
+

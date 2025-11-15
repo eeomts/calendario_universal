@@ -22,10 +22,12 @@ define("PDO_PORT", "3306");
 
 define("PATH", "PHP-PESSOAL/PESSOAL/www/calendario_ufu/calendario_universal/projeto/");
 define("PATH_UPLOAD", "");
-define("BASE_URL", "http://localhost/calendario_universal/projeto/");
+define("BASE_URL", "http://localhost/PHP-PESSOAL/PESSOAL/www/calendario-ufu/calendario_universal/projeto/");
 
 define('DS', DIRECTORY_SEPARATOR);
 define('BASE_DIR', dirname( __FILE__ ) . DS);
+
+
 
 // === CORS ===
 function enableCORS()
@@ -61,8 +63,10 @@ spl_autoload_register(function ($class) {
 
 
 $db = new Db();
-$url = new Url();
-$pagina = $url->getURL(0);
+$url = new RealURL();
+$pagina0 = $url->segment(0);
+$pagina1 = $url->segment(1);
+$pagina2 = $url->segment(2);
 
 function isOnPage($page)
 {
