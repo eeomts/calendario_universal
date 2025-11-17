@@ -121,7 +121,7 @@ class Main
             return [
                 "type" => "success",
                 "message" => "Cadastro realizado com sucesso!",
-                "url" => "cadastro",
+                "url" => "home",
                 "time" => 2500
             ];
 

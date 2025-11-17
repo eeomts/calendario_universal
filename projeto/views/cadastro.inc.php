@@ -1,13 +1,13 @@
 
-
+<br><br><br><br>
 <div class="form-container">
 
     <form id="frm-cadastro" action="<?= BASE_URL ?>ajax/save-cadastro" method="POST" >
 
-        <div class="logo">
-            <h1>Criar Conta</h1>
+        <div class="">
+            <h1 class = "form-title">Criar Conta</h1><br>
             <p>Preencha os dados abaixo para continuar</p><br>
-            <p>Lembre-se após criar sua conta, seu usuario sera equivalente ao seu email sem dominio<br> exemplo: "seu-email@ufu.br", seu usuario será "seu-email"</p>
+
         </div>
 
         <div class="name-group">

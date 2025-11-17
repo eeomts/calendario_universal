@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário Universal</title>
+    <link rel="stylesheet" href="./styles/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="app">
+        <div class="container">
+            <!-- Cabeçalho -->
+            <div class="header">
+                <h1>Calendário Universal</h1>
+                <p class="subtitle">Organize seus compromissos e eventos</p>
+            </div>
+
+            <!-- Grid Principal -->
+            <div class="main-grid">
+                <!-- Calendário -->
+                <div class="calendar-card card">
+                    <!-- Cabeçalho do Calendário -->
+                    <div class="calendar-header">
+                        <div class="calendar-header-left">
+                            <h2 id="current-month-year"></h2>
+                            <button class="btn btn-outline btn-sm" id="today-btn">Hoje</button>
+                        </div>
+                        <div class="calendar-header-right">
+                            <button class="btn btn-outline btn-icon" id="prev-month">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <button class="btn btn-outline btn-icon" id="next-month">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Grid do Calendário -->
+                    <div class="calendar-grid">
+                        <!-- Dias da semana -->
+                        <div class="weekday">Dom</div>
+                        <div class="weekday">Seg</div>
+                        <div class="weekday">Ter</div>
+                        <div class="weekday">Qua</div>
+                        <div class="weekday">Qui</div>
+                        <div class="weekday">Sex</div>
+                        <div class="weekday">Sáb</div>
+                        
+                        <!-- Dias do mês (gerados dinamicamente) -->
+                        <div id="calendar-days"></div>
+                    </div>
+                </div>
+
+                <!-- Painel Lateral -->
+                <div class="sidebar">
+                    <!-- Próximos Eventos -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Próximos Eventos</h3>
+                            <button class="btn btn-outline btn-icon-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div id="events-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Estatísticas -->
+                    <div class="card">
+                        <h3 class="card-title">Este Mês</h3>
+                        <div class="card-content">
+                            <div class="stats-item">
+                                <span>Total de eventos</span>
+                                <span class="badge" id="total-events">0</span>
+                            </div>
+                            <div class="stats-item">
+                                <span>Dias com eventos</span>
+                                <span class="badge" id="days-with-events">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Matérias -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Matérias</h3>
+                            <button class="btn btn-outline btn-icon-sm" id="add-subject-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div id="subjects-list">
+                                <div class="empty-state">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                    </svg>
+                                    <p>Nenhuma matéria adicionada</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar Matéria -->
+    <div id="subject-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3>Adicionar Matéria</h3>
+                    <p class="modal-description">Insira o ID e nome da matéria para adicionar ao calendário.</p>
+                </div>
+                <button class="modal-close" id="close-modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="subject-id">ID da Matéria</label>
+                    <input type="text" id="subject-id" class="input" placeholder="Ex: MAT101">
+                </div>
+                <div class="form-group">
+                    <label for="subject-name">Nome da Matéria</label>
+                    <input type="text" id="subject-name" class="input" placeholder="Ex: Matemática">
+                </div>
+                <button class="btn btn-primary btn-full" id="submit-subject">Adicionar Matéria</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./scripts/main.js"></script>
+</body>
+</html>

@@ -15,7 +15,70 @@ RewriteBase /PHP-PESSOAL/PESSOAL/www/calendario-ufu/calendario_universal/projeto
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L,QSA]
+# Ativa reescrita de URL
+RewriteEngine On
+RewriteBase /PHP-PESSOAL/PESSOAL/www/calendario-ufu/calendario_universal/projeto/
 
+# ---------------------------------------------
+# 1 - Protege arquivos sensíveis
+# ---------------------------------------------
+<FilesMatch "(\.htaccess|\.htpasswd|config\.php|\.ini|\.env)">
+    Require all denied
+</FilesMatch>
+
+# ---------------------------------------------
+# 2 - Remove extensão .php
+# ---------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
+
+# ---------------------------------------------
+# 3 - Roteamento principal para index.php
+# ---------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA]
+
+# ---------------------------------------------
+# 4 - Opcional: força www e HTTPS
+# ---------------------------------------------
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# RewriteCond %{HTTP_HOST} !^www\. [NC]
+# RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]ndex.php [L,QSA]
+# Ativa reescrita de URL
+RewriteEngine On
+RewriteBase /PHP-PESSOAL/PESSOAL/www/calendario-ufu/calendario_universal/projeto/
+
+# ---------------------------------------------
+# 1 - Protege arquivos sensíveis
+# ---------------------------------------------
+<FilesMatch "(\.htaccess|\.htpasswd|config\.php|\.ini|\.env)">
+    Require all denied
+</FilesMatch>
+
+# ---------------------------------------------
+# 2 - Remove extensão .php
+# ---------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
+
+# ---------------------------------------------
+# 3 - Roteamento principal para index.php
+# ---------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA]
+
+# ---------------------------------------------
+# 4 - Opcional: força www e HTTPS
+# ---------------------------------------------
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# RewriteCond %{HTTP_HOST} !^www\. [NC]
+# RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]ndex.php [L,QSA]
 # ---------------------------------------------
 # 3 - Roteamento principal para index.php
 # ---------------------------------------------

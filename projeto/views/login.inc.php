@@ -34,7 +34,7 @@
         <button type="submit" class="btn-primary-custom">Entrar</button>
 
         <p class="login-link">
-            Ainda não tem conta? <a href="cadastro.inc.php">Criar agora</a>
+            Ainda não tem conta? <a href="cadastro">Criar agora</a>
         </p>
 
     </form>

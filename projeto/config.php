@@ -11,6 +11,11 @@ setlocale(LC_ALL, 'pt_BR.UTF8');
 mb_internal_encoding('UTF8');
 mb_regex_encoding('UTF8');
 
+//////INICIO DA SESSAO//////
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 
 define("PDO_HOST", "localhost");
 define("PDO_USER", "root");
@@ -61,12 +66,76 @@ spl_autoload_register(function ($class) {
 });
 
 
-
 $db = new Db();
-$url = new RealURL();
+$url = new Url();
 $pagina0 = $url->segment(0);
 $pagina1 = $url->segment(1);
 $pagina2 = $url->segment(2);
+
+
+// inicializa $url
+if (!isset($url) || !is_object($url)) {
+    if (file_exists(__DIR__ . '/models/Url.php')) {
+        require_once __DIR__ . '/models/Url.php';
+    }
+
+    if (class_exists('Url')) {
+        $url = Url::getInstance();
+    } else {
+        // fallback mínimo compatível com chamadas base() / getBase() / segment()
+        $url = new class {
+            private $baseUrl;
+            private $segments = [];
+
+            public function __construct()
+            {
+                $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+                $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+                $root = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/') . '/';
+                $this->baseUrl = "{$scheme}://{$host}{$root}";
+
+                if (!empty($_GET['url'])) {
+                    $path = (string)$_GET['url'];
+                } else {
+                    $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+                    $basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
+                    if ($basePath !== '') {
+                        $requestPath = preg_replace('#^' . preg_quote($basePath) . '#', '', $requestPath);
+                    }
+                    $path = trim($requestPath, '/');
+                }
+                $this->segments = array_values(array_filter(explode('/', $path)));
+            }
+
+            public function base()
+            {
+                return $this->baseUrl;
+            }
+
+            public function getBase()
+            {
+                return $this->base();
+            }
+
+            public function segment($i, $default = null)
+            {
+                return $this->segments[$i] ?? $default;
+            }
+
+            public function getSegments()
+            {
+                return $this->segments;
+            }
+        };
+    }
+}
+
+
+
+
+
+
+
 
 function isOnPage($page)
 {
@@ -74,4 +143,7 @@ function isOnPage($page)
     $pagina = $url->getURL(0);
     return ($pagina == $page) ? " class=\"active\"" : null;
 }
+
+
+
 
