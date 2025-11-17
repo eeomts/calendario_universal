@@ -2,7 +2,7 @@ $(document).ready(function (e) {
 
 
     // SUBMIT FORMS PELO ID USANDO AJAX JQUERY 2025
-    $(document).on("submit", "#frm-cadastro", function (e) {
+    $(document).on("submit", "#frm-cadastro, #frm-login", function (e) {
         e.preventDefault();
 
         var form = $(this);
@@ -15,16 +15,14 @@ $(document).ready(function (e) {
             dataType: "json",
             success: function (retorno) {
 
-                let toastTime = retorno.time ? retorno.time : 3000;
+                Default.message(retorno.message, retorno.time, retorno.type, retorno.time);
 
-                Default.message(retorno.message, false, retorno.type, toastTime);
-
-                if ((retorno.type === 'success' || retorno.type === 'warning') && retorno.url) {
-                    Default.redirect(retorno.url, toastTime);
+                if ((retorno.type === 'success') && retorno.url) {
+                    Default.redirect(retorno.url,3000);
                 }
 
                 if (retorno.reload === 'reload') {
-                    setTimeout(() => location.reload(), toastTime);
+                    setTimeout(() => location.reload(), 2000);
                 }
             },
             error: function (xhr) {

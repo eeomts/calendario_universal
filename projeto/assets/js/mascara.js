@@ -74,3 +74,40 @@ function mdoc(v) {
     return mcnpj(v);
   }
 }
+
+//RG
+function mrg(v){
+    v = v.replace(/\D/g,"");
+    v = v.replace(/(\d{2})(\d)/,"$1.$2");
+    v = v.replace(/(\d{3})(\d)/,"$1.$2");
+    v = v.replace(/(\d{3})(\d{1})$/,"$1-$2");
+    return v;
+}
+
+
+//placa de carro mercosul
+function mplaca(v){
+    v = v.replace(/[^A-Za-z0-9]/g,"").toUpperCase();
+    v = v.replace(/^([A-Za-z]{3})(\d)/, "$1-$2");
+    return v;
+}
+
+
+//nomes
+function mnome(v){
+    return v
+        .toLowerCase()
+        .replace(/(?:^|\s)\S/g, function(l){ return l.toUpperCase(); });
+}
+
+//apenas letras
+function mletters(v){
+    return v.replace(/[^a-zA-ZÀ-ÿ ]/g,"");
+}
+
+// cartoes bancarios
+function mcc(v){
+    v = v.replace(/\D/g,"");
+    v = v.replace(/(\d{4})(?=\d)/g, "$1 ");
+    return v.trim();
+}

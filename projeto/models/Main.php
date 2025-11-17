@@ -15,41 +15,6 @@ class Main
         }
     }
 
-
-//    public function getDb() {
-//        return $this->db;
-//    }
-//
-//
-//    public function getUsers() {
-//        $sql = "SELECT * FROM usuarios";
-//        $this->db->executeSql($sql);
-//        return $this->db->fetchAll("arr"); // retorna array associativo
-//    }
-//
-//
-//    public function addUser($nome, $email) {
-//        $sql = "INSERT INTO usuarios (nome, email) VALUES (:nome, :email)";
-//        $this->db->setValue([
-//            ["var" => ":nome", "value" => $nome, "parametro" => "str"],
-//            ["var" => ":email", "value" => $email, "parametro" => "str"]
-//        ]);
-//        $this->db->executeSql($sql);
-//        return $this->db->lastId();
-//    }
-
-//    public function ValLogin($post)
-//    {
-//        $data_atual = date('Y-m-d H:i:s');
-//        $senha = md5($post['pass_senha']);
-//
-//        $db = $this->db;
-//        $db->executeSql(
-//            "SELECT * FROM usuarios WHERE usuarios.email = '{$post['email']}' AND usuarios.pass_senha = '$senha' "
-//        );)
-//    }
-
-
     public function insertCadastro($post)
     {
         $db = $this->db;
@@ -119,25 +84,39 @@ class Main
             if ($existe) {
                 return [
                     "type" => "warning",
-                    "message" => "Já existe uma conta com esse e-mail.",
-                    "url" => "login",
-                    "time" => 2500
+                    "message" => "Já existe uma conta com esse e-mail. Se ja possuir uma conta faça login aqui: <a href='login'>LOGIN</a> ou entre em contado com os administradores",
+                    "time" => 4000
+                ];
+            }
+
+
+            $cpf = $post['cpf'];
+            $sql = "SELECT id FROM custom_users WHERE cpf = ?";
+            $db->executeSql($sql, [$cpf]);
+            $existe = $db->fetchAll();
+            if($existe){
+                return [
+                    "type" => "warning",
+                    "message" => "Já existe um cadastro com esse CPF",
+                    "time" => 3000
                 ];
             }
 
             // --- Inserção ---
-            $nome       = trim($post['nome']);
-            $sobrenome  = trim($post['sobrenome']);
-            $senha      = password_hash($post['senha'], PASSWORD_DEFAULT);
-            $token      = bin2hex(random_bytes(16));
-            $data       = date("Y-m-d H:i:s");
-
+            $nome = trim($post['nome']);
+            $sobrenome = trim($post['sobrenome']);
+            $senha = password_hash($post['senha'], PASSWORD_DEFAULT);
+            $token = bin2hex(random_bytes(16));
+            $data = date("Y-m-d H:i:s");
+            $fk_tipo_user = 1;
+            $cpf = trim($post['cpf']);
+            $usuario = strstr($email, '@', true);
             $sql = "
-            INSERT INTO custom_users (nome, sobrenome, email, pass_senha, token, created)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO custom_users (nome, sobrenome, email, pass_senha, token, created, fk_tipo, cpf, usuario)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ";
 
-            $db->executeSql($sql, [$nome, $sobrenome, $email, $senha, $token, $data]);
+            $db->executeSql($sql, [$nome, $sobrenome, $email, $senha, $token, $data, $fk_tipo_user, $cpf, $usuario]);
 
             return [
                 "type" => "success",
@@ -159,6 +138,60 @@ class Main
                 "message" => "Erro inesperado: " . $e->getMessage(),
                 "url" => "404",
                 "time" => 2500
+            ];
+        }
+    }
+
+    public function GetLogin($post)
+    {
+        try {
+
+            if (empty($post['usuario'])) {
+                return [
+                    "type" => "error",
+                    "message" => "O usuário é obrigatório.",
+                    "time" => 2500
+                ];
+            }
+
+            if (empty($post['senha'])) {
+                return [
+                    "type" => "error",
+                    "message" => "A senha é obrigatória.",
+                    "time" => 2500
+                ];
+            }
+
+            $remember = isset($post['lembrar']);
+
+            // agora sim: verifica existência
+            $auth = new Auth();
+            $login = $auth->login(
+                $post['usuario'],
+                $post['senha'],
+                $remember
+            );
+
+            if (!$login['success']) {
+                return [
+                    "type" => "error",
+                    "message" => $login['message'],
+                    "time" => 2500
+                ];
+            }
+
+            return [
+                "type" => "success",
+                "message" => "Login efetuado com sucesso!",
+                "url" => "home",
+                "time" => 2000
+            ];
+
+        } catch (Exception $e) {
+            return [
+                "type" => "error",
+                "message" => "Erro inesperado: " . $e->getMessage(),
+                "time" => 3000
             ];
         }
     }

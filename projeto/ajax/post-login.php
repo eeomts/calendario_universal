@@ -1,7 +1,13 @@
 <?php
-include('../config.php');
-extract($_POST);
-$ip = $_SERVER['REMOTE_ADDR'];
-$data = date('d/m/Y - H:i');
-$Main = new Main();
-$login = $Main->login($email, $senha);
+
+session_start();
+
+
+// require_once __DIR__ . '/../models/Main.php';
+
+$main = new Main();
+$retorno = $main->GetLogin($_POST);
+
+header('Content-Type: application/json; charset=utf-8');
+echo json_encode($retorno);
+exit;

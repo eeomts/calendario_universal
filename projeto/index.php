@@ -1,31 +1,87 @@
 <?php
-
-
 include('config.php');
+include('rememberAuth.php');
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-//class
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $url = new RealURL();
-$MainClass = new Main();
-$pagina0 = $url->segment(0);
-$pagina1 = $url->segment(1);
+$pagina0 = $url->segment(0);   // login, cadastro, home, painel, etc
+$pagina1 = $url->segment(1);   // para rotas com subpáginas
 $pagina2 = $url->segment(2);
 
-
-if ($pagina0 == 'ajax') {
-    include("ajax/{$pagina1}.php");
+// AJAX → sempre carregar e encerrar
+if ($pagina0 === 'ajax') {
+    if ($pagina1) {
+        include "ajax/{$pagina1}.php";
+    }
     exit;
 }
 
-//echo BASE_DIR;
+// VERIFICA LOGIN
+$logado = isset($_SESSION['usuario_id']);
 
-//functions
-//$users = $MainClass->getUsuarios();
-//echo "<pre>";
-//var_dump($users);
+// ======== ROTEAMENTO PRINCIPAL ======== //
+switch ($pagina0) {
 
+    // ---- LOGIN ----
+    case 'login':
+        if ($logado) {
+            header("Location: " . $url->base('home'));
+            exit;
+        }
+        $view = "views/login.php";
+        break;
+
+    // ---- CADASTRO ----
+    case 'cadastro':
+        if ($logado) {
+            header("Location: " . $url->base('home'));
+            exit;
+        }
+        $view = "views/cadastro.php";
+        break;
+
+    // ---- LOGOUT ----
+    case 'logout':
+        session_destroy();
+        header("Location: " . $url->base('login'));
+        exit;
+        break;
+
+    // ---- HOME (RESTRITO) ----
+    case 'home':
+        if (!$logado) {
+            header("Location: " . $url->base('login'));
+            exit;
+        }
+        $view = "views/home.inc.php";
+        break;
+
+    // ---- PAINEL DO USUÁRIO ----
+    case 'painel':
+        if (!$logado) {
+            header("Location: " . $url->base('login'));
+            exit;
+        }
+        $view = "views/painel.php";
+        break;
+
+    // ---- PÁGINA INICIAL PADRÃO ----
+    case '':
+    default:
+        if ($logado) {
+            $view = "views/home.inc.php";
+        } else {
+            $view = "views/login.php";
+        }
+        break;
+}
 
 ?>
 
@@ -38,14 +94,15 @@ if ($pagina0 == 'ajax') {
 
 <!--<meta name="ajax-full-path" content="--><?php //= $url->getBase(); ?><!--">-->
 
+<!--bootstrap-->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 
-
-
-<!--    <link rel="stylesheet" href="assets/css/style.css?--><?php //= time() ?><!--">-->
+    <link rel="stylesheet" href="assets/css/style.css?<?= time() ?>">
 
 <link href="<?= $url->base(); ?>assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css"/>
 
 <link href="<?= $url->base(); ?>assets/libs/toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
+    <link href="<?= $url->base(); ?>assets/libs/toastr/toastr.css" rel="stylesheet" type="text/css"/>
 <link href="<?= $url->base(); ?>assets/libs/jqueryconfirm/css/jquery-confirm.css" rel="stylesheet"
       type="text/css"/>
 
@@ -53,9 +110,9 @@ if ($pagina0 == 'ajax') {
 
 </head>
 <body>
-<?php include "views/cadastro.inc.php"; ?>
+<?php include "views/login.inc.php"; ?>
 
-<?php echo $url->base()?>
+
 
 <!-- jQuery -->
 <script src="<?= $url->base(); ?>assets/js/jquery-3.7.1.min.js" type="text/javascript"></script>
