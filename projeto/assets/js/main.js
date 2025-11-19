@@ -56,7 +56,7 @@ $(document).ready(function (e) {
             }).then(function (json) {
                 if (json && json.type === 'success') {
                     // mostra notificação com toastr via Default.message
-                    Default.message(json.message || 'Logout efetuado', json.time || 2000, 'success');
+                    Default.message(json.message || 'Saindo...', json.time || 2000, 'warning');
                     // redireciona para /login usando base
                     Default.redirect(base + '/login', json.time || 2000);
                 } else {

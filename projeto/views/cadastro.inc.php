@@ -2,7 +2,7 @@
 <br><br><br><br>
 <div class="form-container">
 
-    <form id="frm-cadastro" action="<?= BASE_URL ?>ajax/save-cadastro" method="POST" >
+    <form id="frm-cadastro" action="ajax/save-cadastro" method="POST" >
 
         <div class="">
             <h1 class = "form-title">Criar Conta</h1><br>

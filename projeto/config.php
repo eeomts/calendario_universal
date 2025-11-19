@@ -19,7 +19,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 define("PDO_HOST", "localhost");
 define("PDO_USER", "root");
-define("PDO_DB", "calendario_ufu");
+define("PDO_DB", "calendario_ufu1");
 define("PDO_PASS", "");
 
 define("PDO_DRIVER", "mysql");
@@ -27,7 +27,8 @@ define("PDO_PORT", "3306");
 
 define("PATH", "PHP-PESSOAL/PESSOAL/www/calendario_ufu/calendario_universal/projeto/");
 define("PATH_UPLOAD", "");
-define("BASE_URL", "http://localhost/PHP-PESSOAL/PESSOAL/www/calendario-ufu/calendario_universal/projeto/");
+
+
 
 define('DS', DIRECTORY_SEPARATOR);
 define('BASE_DIR', dirname( __FILE__ ) . DS);

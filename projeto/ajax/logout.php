@@ -22,7 +22,7 @@ try {
     $auth = new Auth();
     $auth->logout();
 
-    echo json_encode(['type' => 'success', 'message' => 'Logout efetuado com sucesso.']);
+    echo json_encode(['type' => 'success', 'message' => 'Saindo...']);
     exit;
 } catch (Throwable $e) {
     http_response_code(500);
